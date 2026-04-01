@@ -39,7 +39,7 @@ data/incoming/auto/*.xlsx
 
 data/incoming/manual/actual_kospi200_2026.csv
 
-data/raw/kospi_db_full_20260320.sql
+# data/raw/kospi_db_full_20260320.sql
 
 # Keep these tracked only if you explicitly want runnable data in the repo
 # data/raw/model_package.pkl
