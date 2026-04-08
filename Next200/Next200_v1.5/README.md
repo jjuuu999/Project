@@ -164,7 +164,7 @@ coarse search 기준 상위 조합은 아래와 같았습니다.
 - 내부 순위 예측을 직접 반영하는 추가 피처 설계
 - 경계권 종목 분리 강화를 위한 feature engineering
 - 필요 시 더 고성능의 tabular model 확장 검토
-
+- streamlit실행시 로딩 시간 축소
 
 ## 실행 안내
 
