@@ -13,17 +13,20 @@ from src.sql_dump import load_table
 
 
 V15_FEATURES = [
+    "prev_was_member",
     "period_rank",
-    "foreign_change",
+    "dist_from_200",
+    "float_dist_from_200",
+    "float_rate",
+    "float_mktcap_rank",
+    "rank_change",
+    "sector_relative_rank",
+    "non_float_ratio",
     "sector_rank",
     "major_holder_ratio",
-    "sector_relative_rank",
-    "rank_change",
-    "treasury_ratio",
-    "turnover_ratio",
-    "prev_was_member",
-    "avg_mktcap",
-    "last_foreign_ratio",
+    "avg_exhaustion_rate",
+    "avg_foreign_ratio",
+    "foreign_change",
 ]
 
 
@@ -201,6 +204,18 @@ def build_historical_snapshot(config) -> pd.DataFrame:
         frame["sector_count"] = frame.groupby("gics_sector")["ticker"].transform("count")
         frame["sector_relative_rank"] = frame["sector_rank"] / frame["sector_count"]
 
+        frame["float_rate"] = pd.to_numeric(frame["float_rate"], errors="coerce").fillna(0.0)
+        frame["non_float_ratio"] = (
+            pd.to_numeric(frame["major_holder_ratio"], errors="coerce").fillna(0.0)
+            + pd.to_numeric(frame["treasury_ratio"], errors="coerce").fillna(0.0)
+        )
+        frame["float_mktcap"] = (
+            pd.to_numeric(frame["avg_mktcap"], errors="coerce").fillna(0.0) * frame["float_rate"]
+        )
+        frame["float_mktcap_rank"] = frame["float_mktcap"].rank(method="first", ascending=False).astype(int)
+        frame["dist_from_200"] = pd.to_numeric(frame["period_rank"], errors="coerce") - 200
+        frame["float_dist_from_200"] = frame["float_mktcap_rank"] - 200
+
         numeric_fill_zero = [
             "major_holder_ratio",
             "treasury_ratio",
@@ -211,6 +226,7 @@ def build_historical_snapshot(config) -> pd.DataFrame:
             "avg_mktcap",
             "prev_was_member",
             "rank_change",
+            "avg_exhaustion_rate",
         ]
         for column in numeric_fill_zero:
             frame[column] = pd.to_numeric(frame[column], errors="coerce").fillna(0.0)
@@ -260,7 +276,7 @@ def build_v15_package() -> Path:
     v15_package = dict(base_package)
     v15_package["model"] = model
     v15_package["model_name"] = "XGBoost"
-    v15_package["method"] = "XGBoost 11 features"
+    v15_package["method"] = "XGBoost 14 features"
     v15_package["model_version"] = "v1.5"
     v15_package["features"] = list(V15_FEATURES)
     v15_package["created_at"] = datetime.now().isoformat(timespec="seconds")

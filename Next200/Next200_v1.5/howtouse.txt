@@ -59,8 +59,13 @@ python -m venv .venv
 
 
 이후 실행
-
 cd <프로젝트_폴더>\Next200_v1.5
+.\.venv\Scripts\python.exe run_weekly_collection.py
+.\.venv\Scripts\python.exe run_weekly_prediction.py --as-of 2026-04-07
+.\.venv\Scripts\python.exe -m streamlit run app.py
+
+
+cd C:\Users\Admin\Desktop\Project\Next200\Next200_v1.5
 .\.venv\Scripts\python.exe run_weekly_collection.py
 .\.venv\Scripts\python.exe run_weekly_prediction.py --as-of 2026-04-07
 .\.venv\Scripts\python.exe -m streamlit run app.py

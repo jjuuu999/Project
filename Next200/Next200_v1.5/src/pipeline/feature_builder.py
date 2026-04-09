@@ -252,6 +252,9 @@ def build_weekly_features(as_of: pd.Timestamp | None = None) -> dict[str, object
     merged["krx_group"] = merged["krx_group"].fillna(merged["industry"]).fillna("기타")
     merged["period"] = target_period
     merged["float_mktcap"] = merged["avg_mktcap"] * merged["float_rate"].fillna(0.0)
+    merged["float_mktcap_rank"] = merged["float_mktcap"].rank(method="first", ascending=False).astype(int)
+    merged["dist_from_200"] = merged["period_rank"] - 200
+    merged["float_dist_from_200"] = merged["float_mktcap_rank"] - 200
 
     if prev_period:
         prev_feature = feature_krx_hist[feature_krx_hist["period"].astype(str) == prev_period].copy()
@@ -298,6 +301,7 @@ def build_weekly_features(as_of: pd.Timestamp | None = None) -> dict[str, object
 
     merged["major_holder_ratio"] = naver_major.combine_first(dart_major).fillna(0.0) / 100.0
     merged["treasury_ratio"] = naver_treasury.combine_first(dart_treasury).fillna(0.0) / 100.0
+    merged["non_float_ratio"] = merged["major_holder_ratio"] + merged["treasury_ratio"]
     merged.loc[naver_major.isna() & dart_major.notna(), "major_holder_source"] = "dart_fallback"
     merged.loc[naver_treasury.isna() & dart_treasury.notna(), "treasury_source"] = "dart_fallback"
     merged["major_holder_source"] = merged["major_holder_source"].fillna("naver_actual")
@@ -383,10 +387,14 @@ def build_weekly_features(as_of: pd.Timestamp | None = None) -> dict[str, object
             "period_rank",
             "turnover_ratio",
             "float_mktcap",
+            "float_mktcap_rank",
+            "dist_from_200",
+            "float_dist_from_200",
             "prev_rank",
             "rank_change",
             "major_holder_ratio",
             "treasury_ratio",
+            "non_float_ratio",
             "sector_rank",
             "sector_relative_rank",
             "sector_member_score",
