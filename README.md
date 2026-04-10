@@ -15,7 +15,7 @@
 - **Tools**: System Design, AI Planning, Process Automation
 - **Link**: [fa08-1st-Iconic](https://github.com/KpmgFuture-Academy/fa08-1st-Iconic)
 
-### ⚡ [2차 프로젝트] Next200 — KOSPI 200 편입/편출 종목 예측 서비스
+### 📈 [2차 프로젝트] Next200 — KOSPI 200 편입/편출 종목 예측 서비스
 - **Description**: LightGBM 기반 KOSPI 200 정기변경 편입/편출 후보 종목을 예측하는 머신러닝 파이프라인 및 Streamlit 시각화 서비스
 - **Team**: 넘버스 (Numbers) — 고휘주, 손소희, 유태상
 - **Period**: 2026.03.11 ~ 2026.03.24
